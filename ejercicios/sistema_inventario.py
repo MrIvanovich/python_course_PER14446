@@ -79,13 +79,16 @@ class Producto:
         self.precio = precio
         self.cantidad = cantidad
 
-    def actualizar_precio(self,nuevo_precio):
-        
+
+    def actualizar_precio(self, nuevo_precio: float):
+        if nuevo_precio <= 0:
+            raise ValueError("El precio debe ser mayor que 0")
         self.precio = nuevo_precio
 
-    def actualizar_cantidad(self,nueva_cantidad):
-        
-        self.cantidad = nueva_cantidad
+    def actualizar_cantidad(self, nueva_cantidad: int):
+        if nueva_cantidad < 0:
+            raise ValueError("La cantidad no puede ser negativa")
+        self.cantidad = nueva_cantidad        
 
 
     def calcular_valor_total(self):
@@ -110,6 +113,9 @@ class Inventario:
     def buscar_producto(self, nombre):
         return self.productos.get(nombre)
     
+    def calcular_valor_inventario(self):
+        return sum(p.calcular_valor_total() for p in self.productos.values())
+    
     def listar_productos(self):
         for producto in self.productos.values():
             print(producto)
@@ -125,7 +131,8 @@ def menu_principal():
         "INVENTARIO": [
             "4.- Buscar un producto del inventario por su nombre",
             "5.- Listar todos los productos del inventario",
-            "6.- Devolver el valor total de un producto"
+            "6.- Devolver el valor total de un producto",
+            "7.- Devolver el valor total del inventario"            
         ]           
     }
 
@@ -411,7 +418,7 @@ def main():
 
         # 6.- Devolver el valor total de un producto
 
-        else:
+        elif opcion == "6":
 
             if len(inventario.productos) > 0:
 
@@ -425,7 +432,19 @@ def main():
 
             else: 
 
-                 volver_menu("No existen productos en el inventario")                
+                 volver_menu("No existen productos en el inventario") 
+
+        else:
+
+            if len(inventario.productos) > 0:
+
+                valor_total = inventario.calcular_valor_inventario()
+                
+                print("El valor total del inventario es de" , valor_total, "€")
+
+            else: 
+
+                 volver_menu("No existen productos en el inventario")                                    
 
             
     
