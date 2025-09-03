@@ -68,6 +68,13 @@ class Producto:
         
         """
 
+        if not nombre.strip():
+            raise ValueError("El nombre no puede estar vacío")
+        if precio < 0:
+            raise ValueError("El precio no puede ser negativo")
+        if cantidad < 0:
+            raise ValueError("La cantidad no puede ser negativa")        
+
         self.nombre = nombre
         self.precio = precio
         self.cantidad = cantidad
@@ -79,6 +86,11 @@ class Producto:
     def actualizar_cantidad(self,nueva_cantidad):
         
         self.cantidad = nueva_cantidad
+
+
+    def calcular_valor_total(self):
+        
+        return self.precio * self.cantidad
 
     def __str__(self):
         
@@ -112,7 +124,8 @@ def menu_principal():
         ],
         "INVENTARIO": [
             "4.- Buscar un producto del inventario por su nombre",
-            "5.- Listar todos los productos del inventario"
+            "5.- Listar todos los productos del inventario",
+            "6.- Devolver el valor total de un producto"
         ]           
     }
 
@@ -385,7 +398,7 @@ def main():
 
         # 5.- Listar todos los productos del inventario
 
-        else:
+        elif opcion == "5":
 
             if len(inventario.productos) > 0:
 
@@ -395,6 +408,24 @@ def main():
             else: 
 
                 volver_menu("No existen productos en el inventario")
+
+        # 6.- Devolver el valor total de un producto
+
+        else:
+
+            if len(inventario.productos) > 0:
+
+                producto = buscar_producto_input()
+
+                if producto is None:
+                    continue
+
+                valor = producto.calcular_valor_total()
+                print("El valor total de", producto.nombre , "es de", valor, "€")
+
+            else: 
+
+                 volver_menu("No existen productos en el inventario")                
 
             
     
